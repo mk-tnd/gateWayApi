@@ -1,14 +1,14 @@
 import express, { Application } from "express";
-import router from "./routes/routes";
+import ROUTES from "./routes/routes";
+import setupProxies from "./middleware/proxy";
 
 const app: Application = express();
 const port = 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", router);
 
-app.get("/", (req, res) => res.send("LINE MAN Wongnai Frontend Assignment"));
+setupProxies(app, ROUTES);
 
 try {
   app.listen(port, (): void => {

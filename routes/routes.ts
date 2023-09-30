@@ -1,18 +1,25 @@
-import axios from 'axios'
-import express, { response } from 'express'
-const registry = require('./registry.json')
+const ROUTES = [
+  {
+    url: '/api/v1/restaurants/:restaurantId.json',
+    proxy: {
+      target: "http://localhost:3002",
+      changeOrigin: true,
+    }
+  },
+  {
+    url: '/api/v1/restaurants/:restaurantId/menus/:menuName/short.json',
+    proxy: {
+      target: "http://localhost:3003",
+      changeOrigin: true,
+    }
+  },
+  {
+    url: '/api/v1/restaurants/:restaurantId/menus/:menuName/full.json',
+    proxy: {
+      target: "http://localhost:3003",
+      changeOrigin: true,
+    }
+  },
+]
 
-const router = express.Router()
-
-router.all('/:apiName/:path', (req, res) => {
-  console.log(req.params.apiName)
-  if (registry.service[req.params.apiName]) {
-    axios
-      .get(registry.service[req.params.apiName].url + req.params.path)
-      .then((response) => {
-        res.send(response.data)
-      })
-  }
-})
-
-export default router
+ export default ROUTES;
