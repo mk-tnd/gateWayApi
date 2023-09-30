@@ -1,17 +1,18 @@
-import axios from "axios";
-import express, { response } from "express";
+import axios from 'axios'
+import express, { response } from 'express'
+const registry = require('./registry.json')
 
-const router = express.Router();
+const router = express.Router()
 
-router.all("/:apiName", (req, res) => {
-  console.log(req.params.apiName);
-  axios
-    .get(
-      "https://us-central1-wongnai-frontend-assignment.cloudfunctions.net/api/restaurants/:restaurantId.json"
-    )
-    .then((response) => {
-      res.send(response.data);
-    });
-});
+router.all('/:apiName/:path', (req, res) => {
+  console.log(req.params.apiName)
+  if (registry.service[req.params.apiName]) {
+    axios
+      .get(registry.service[req.params.apiName].url + req.params.path)
+      .then((response) => {
+        res.send(response.data)
+      })
+  }
+})
 
-export default router;
+export default router
